@@ -4,7 +4,10 @@ import chisel3._
 import chisel3.util._
 
 class Master(p: Config) extends Module {
-  val io = IO(new MainLink(p))
+  val io = IO(new Bundle {
+    val io  = new SimpleLink(p)
+    val apb = new ApbLink(p)
+  })
 
   val sIdle :: sWSetup :: sWAccess :: sWfin :: Nil = Enum(4)
 
