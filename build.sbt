@@ -56,6 +56,7 @@ lazy val root = (project in file("."))
     maxErrors := 3,
     commonSettings,
     pubSettings,
+    commonDeps,
     chiselDeps,
     zioDeps,
     testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))

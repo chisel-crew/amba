@@ -2,15 +2,8 @@ package crew.chisel.amba.apb
 
 import chisel3._
 
-case class Params(
-  addrWidth: Int,
-  dataWidth: Int,
-  protWidth: Int,
-  strbWidth: Int
-)
-
 // Master side signal directions
-class ApbLink(p: Params) extends Bundle {
+class ApbLink(p: Config) extends Bundle {
 
   val paddr   = Output(UInt(p.addrWidth.W))
   val pprot   = Output(UInt(p.protWidth.W))
@@ -27,5 +20,5 @@ class ApbLink(p: Params) extends Bundle {
 }
 
 object APBBundle {
-  def apply(p: Params) = new ApbLink(p)
+  def apply(p: Config) = new ApbLink(p)
 }
