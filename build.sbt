@@ -31,11 +31,12 @@ lazy val commonSettings = Seq(
     "-unchecked",
     "-deprecation"
   ),
-  name := "hello",
+  name := "amba",
   version := "0.0.1"
 )
 
 lazy val commonDeps = libraryDependencies ++= Seq(
+  // "chisel-crew"           %% "koyot-client" % Version.koyot,
   "com.github.pureconfig" %% "pureconfig" % Version.pureconfig
 )
 

@@ -4,10 +4,7 @@ import chisel3._
 import chisel3.util._
 
 class Master(p: Config) extends Module {
-  val io = IO({
-    val apb = new ApbLink(p)
-    val io  = new SimpleLink(p)
-  })
+  val io = IO(new MainLink(p))
 
   val sIdle :: sWSetup :: sWAccess :: sWfin :: Nil = Enum(4)
 
@@ -19,13 +16,13 @@ class Master(p: Config) extends Module {
 
     // Idle phase
     is(sIdle) {
-      io.paddr := UInt(0.W)
-      io.pprot := UInt(0.W)
-      io.psel := false.B
-      io.penable := false.B
-      io.pwrite := false.B
-      io.pwdata := UInt(0.W)
-      io.pstrb := UInt(0.W)
+      io.apb.paddr := UInt(0.W)
+      io.apb.pprot := UInt(0.W)
+      io.apb.psel := false.B
+      io.apb.penable := false.B
+      io.apb.pwrite := false.B
+      io.apb.pwdata := UInt(0.W)
+      io.apb.pstrb := UInt(0.W)
 
       when(start) {
         state := sWSetup
@@ -35,25 +32,25 @@ class Master(p: Config) extends Module {
 
     // Setup phase
     is(sWSetup) {
-      io.pwrite := true.B
-      io.paddr := ???
-      io.pwdata := ???
-      io.pstrb := UInt(1.W)
-      io.pprot := UInt(1.W)
+      io.apb.pwrite := true.B
+      io.apb.paddr := io.io.addr
+      io.apb.pwdata := io.io.wdata
+      io.apb.pstrb := UInt(1.W)
+      io.apb.pprot := UInt(1.W)
 
-      io.psel := true.B
-      io.penable := false.B
+      io.apb.psel := true.B
+      io.apb.penable := false.B
 
-      io.pwrite := true.B
+      io.apb.pwrite := true.B
 
       state := sWAccess
     }
 
     // Access phase
     is(sWAccess) {
-      io.penable := true.B
+      io.apb.penable := true.B
 
-      when(!io.pready) {
+      when(!io.apb.pready) {
         state := sWfin
       }
 
